@@ -6,6 +6,8 @@ from profiles.serializers import UserSerializer, UserLoginSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 
+
+
 @api_view(['POST'])
 def register(request):
     serializer = UserSerializer(data=request.data)
@@ -48,7 +50,7 @@ def logout(request):
     return Response('Logged out successfully')
 
 class CustomAuthToken(ObtainAuthToken):
-    def post(self, request):
-        response = super().post(request.data)
-        token = Token.objects.get(key=response.data['token'])
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        token, created = Token.objects.get_or_create(user=response.data['user'])
         return Response({'token': token.key, 'user_id': token.user_id})
