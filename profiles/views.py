@@ -30,7 +30,7 @@ def login(request):
         return Response('Logged in successfully')
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['PATCH'])
+@api_view(['PUT'])
 def update(request):
     user = request.user
     serializer = UserSerializer(user, data=request.data, partial=True)
